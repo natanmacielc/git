@@ -1,0 +1,202 @@
+Gravando Alterações em seu Repositório
+
+Verificando os Status de Seus Arquivos
+A principal ferramenta que você vai usar para determinar quais arquivos estão em qual estado é o comando git status. 
+Se você executar esse comando imediatamente após clonar um repositório, você vai ver algo assim:
+$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+nothing to commit, working directory clean
+
+Isso significa que você tem um diretório de trabalho limpo - em outras palavras, nenhum de seus arquivos rastreados 
+foi modificado. O Git também não está vendo nenhum arquivo não rastreado, senão eles estariam listados aqui. Finalmente, o 
+comando lhe diz qual o branch que você está e diz que ele não divergiu do mesmo branch no servidor. Por enquanto, esse branch 
+é sempre “master”, que é o padrão.
+Digamos que você adiciona um novo arquivo no seu projeto, um simples arquivo README. Se o arquivo não existia antes, e você 
+executar git status, você verá seu arquivo não rastreado da seguinte forma:
+$ echo 'My Project' > README
+$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+    README
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+Você pode ver que o seu novo arquivo README é um arquivo não rastreado, porque está abaixo do subtítulo “Untracked files” na 
+saída do seu status. "Não rastreado" basicamente significa que o Git vê um arquivo que você não tinha no snapshot (commit) 
+anterior; o Git não vai passar a incluir o arquivo nos seus commits a não ser que você o mande fazer isso explicitamente. 
+O comportamento do Git é dessa forma para que você não inclua acidentalmente arquivos binários gerados automaticamente ou 
+outros arquivos que você não deseja incluir. Você quer incluir o arquivo README, então vamos comeaçar a rastreá-lo.
+
+Rastreando Arquivos Novos
+Para começar a rastrear um novo arquivo, você deve usar o comando git add. Para começar a rastrear o arquivo README, 
+você deve executar o seguinte:$ git add README
+Executando o comando status novamente, você pode ver que seu README agora está sendo rastreado e preparado (staged) para o commit:
+
+$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+    new file:   README
+
+É possível saber que o arquivo está preparado porque ele aparece sob o título “Changes to be committed”. Se você fizer um 
+commit neste momento, a versão do arquivo que existia no instante em que você executou git add, é a que será armazenada no 
+histórico de snapshots. Você deve se lembrar que, quando executou git init anteriormente, em seguida, você também executou 
+git add (arquivos) - isso foi para começar a rastrear os arquivos em seu diretório. O comando git add recebe o caminho de um 
+arquivo ou de um diretório. Se for um diretório, o comando adiciona todos os arquivos contidos nesse diretório recursivamente.
+
+Preparando Arquivos Modificados
+Vamos modificar um arquivo que já estava sendo rastreado. Se você modificar o arquivo CONTRIBUTING.md, que já era rastreado, 
+e então executar git status novamente, você deve ver algo como:
+
+$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+    new file:   README
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+    modified:   CONTRIBUTING.md
+
+O arquivo CONTRIBUTING.md aparece sob a seção “Changes not staged for commit” — que indica que um arquivo rastreado foi 
+modificado no diretório de trabalho mas ainda não foi mandado para o stage (preparado). Para mandá-lo para o stage, você precisa
+executar o comando git add. O git add é um comando de múltiplos propósitos: serve para começar a rastrear arquivos e também 
+para outras coisas, como marcar arquivos que estão em conflito de mesclagem como resolvidos. Pode ser útil pensar nesse comando 
+mais como “adicione este conteúdo ao próximo commit”. Vamos executar git add agora, para mandar o arquivo CONTRIBUTING.md para 
+o stage, e então executar git status novamente:
+$ git add CONTRIBUTING.md
+$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+    new file:   README
+    modified:   CONTRIBUTING.md
+
+Status Curto
+Ao mesmo tempo que a saída do git status é bem completa, ela também é bastante verbosa. O Git também tem uma flag para status 
+curto, que permite que você veja suas alterações de forma mais compacta. Se você executar git status -s ou git status --short
+a saída do comando vai ser bem mais simples:
+
+$ git status -s
+ M README
+MM Rakefile
+A  lib/git.rb
+M  lib/simplegit.rb
+?? LICENSE.txt
+
+Arquivos novos que não são rastreados têm um ?? do lado, novos arquivos que foram adicionados à área de stage têm um A, arquivos
+modificados têm um M e assim por diante. Há duas colunas de status na saída: a coluna da esquerda indica o status da área de 
+stage e a coluna da direita indica o status do diretório de trabalho.
+
+Ignorando Arquivos
+Frequentemente você terá uma classe de arquivos que não quer que sejam adicionados automaticamente pelo Git e nem mesmo que ele 
+os mostre como não-rastreados. Geralmente, esses arquivos são gerados automaticamente, tais como arquivos de log ou arquivos 
+produzidos pelo seu sistema de compilação (build). Nesses casos, você pode criar um arquivo chamado .gitignore, contendo uma 
+lista de padrões de nomes de arquivo que devem ser ignorados. Aqui está um exemplo de arquivo .gitignore:
+*.[oa]
+*~
+
+A primeira linha diz ao Git para ignorar todos os arquivos que terminem com “.o” ou “.a” – arquivos objeto ou de arquivamento, 
+que podem ser produtos do processo de compilação. A segunda linha diz ao Git para ignorar todos os arquivos cujo nome termine 
+com um til (~), que é usado por muitos editores de texto, como o Emacs, para marcar arquivos temporários. Você também pode 
+incluir diretórios log, tmp ou pid; documentação gerada automaticamente; e assim por diante
+
+As regras para os padrões que podem ser usados no arquivo .gitignore são as seguintes:
+Linhas em branco ou começando com # são ignoradas.
+Os padrões que normalmente são usados para nomes de arquivos funcionam.
+Você pode iniciar padrões com uma barra (/) para evitar recursividade.
+Você pode terminar padrões com uma barra (/) para especificar um diretório.
+Você pode negar um padrão ao fazê-lo iniciar com um ponto de exclamação (!).
+
+Aqui está outro exemplo de arquivo .gitignore:
+
+# ignorar arquivos com extensão .a
+*.a
+
+# mas rastrear o arquivo lib.a, mesmo que você esteja ignorando os arquivos .a acima
+!lib.a
+
+# ignorar o arquivo TODO apenas no diretório atual, mas não em subdir/TODO
+/TODO
+
+# ignorar todos os arquivos no diretório build/
+build/
+
+# ignorar doc/notes.txt, mas não doc/server/arch.txt
+doc/*.txt
+
+# ignorar todos os arquivos .pdf no diretório doc/
+doc/**/*.pdf
+
+O GitHub mantém uma lista bem abrangente com bons exemplos de arquivo .gitignore para vários projetos e linguagens em 
+https://github.com/github/gitignore, se você quiser um ponto de partida para o seu projeto.
+
+Visualizando Suas Alterações Dentro e Fora do Stage
+Se o comando git status for vago demais para você — você quer saber exatamente o que você alterou, não apenas quais arquivos 
+foram alterados — você pode usar o comando git diff. O git diff exibe exatamente as linhas que foram adicionadas e removidas
+— o patch, como costumava se chamar.
+
+Se você quiser ver as alterações que você mandou para o stage e que entrarão no seu próximo commit, você pode usar 
+git diff --staged. Este comando compara as alterações que estão no seu stage com o seu último commit.
+
+Fazendo Commit das Suas Alterações
+Agora que sua área de stage está preparada do jeito que você quer, você pode fazer commit das suas alterações. Lembre-se que 
+qualquer coisa que ainda não foi enviada para o stage — qualquer arquivo que você tenha criado ou alterado e que ainda não tenha 
+sido adicionado com git add — não entrará nesse commit. Esses arquivos permanecerão no seu disco como arquivos alterados. Nesse 
+caso, digamos que, da última vez que você executou git status, você viu que tudo estava no stage, então você está pronto para 
+fazer commit de suas alterações. O jeito mais simples de fazer commit é digitar git commit:
+$ git commit
+
+Alternativamente, você pode digitar sua mensagem de commit diretamente na linha de comando, depois da opção -m do comando commit,
+assim:
+$ git commit -m "Story 182: Fix benchmarks for speed"
+
+Pulando a Área de Stage
+Mesmo sendo incrivelmente útil para preparar commits exatamente como você quer, a área de stage algumas vezes é um pouco mais 
+complexa do que o necessário. Se você quiser pular a área de stage, o Git fornece um atalho simples. A opção -a, do comando git 
+commit, faz o Git mandar todos arquivos rastreados para o stage automaticamente, antes de fazer o commit, permitindo que você 
+pule a parte do git add:
+$ git commit -a -m 'added new benchmarks'
+
+Removendo Arquivos
+Para remover um arquivo do Git, você tem que removê-lo dos seus arquivos rastreados (mais precisamente, removê-lo da sua área de 
+stage) e então fazer um commit. O comando git rm faz isso, e também remove o arquivo do seu diretório de trabalho para que você 
+não o veja como um arquivo não-rastreado nas suas próximas interações.
+Se você simplesmente remover o arquivo do seu diretório, ele aparecerá sob a área “Changes not staged for commit” (isto é, fora 
+do stage) da saída do seu git status.
+Mas, se você executar git rm, o arquivo será preparado para remoção (retirado do stage).
+Da próxima vez que você fizer um commit, o arquivo será eliminado e não será mais rastreado. Se o arquivo tiver sido alterado ou 
+se já tiver adicionado à área de stage, você terá que forçar a remoção com a opção -f. 
+Outra coisa útil que você pode querer fazer é manter o arquivo no seu diretório de trabalho, mas removê-lo da sua área de stage. 
+Em outras palavras, você pode querer manter o arquivo no seu disco rígido, mas não deixá-lo mais sob controle do Git. Isso é 
+particularmente útil se você esquecer de adicionar alguma coisa ao seu arquivo .gitignore e, acidentalmente, mandá-la para o 
+stage, como um grande arquivo de log ou um monte de arquivos compilados .a. Para fazer isso, use a opção --cached:
+$ git rm --cached README
+
+Você pode passar arquivos, diretórios e padrões de nomes para o comando git rm. Isso quer dizer que você pode fazer coisas como:
+$ git rm log/\*.log
+
+Note a barra invertida (\) na frente do *. Isso é necessário porque o Git faz sua própria expansão de nomes de arquivos em adição 
+a que é feita pela sua shell. Esse comando remove todos os arquivos que tenham a extensão .log do diretório log/. Ou, você pode 
+fazer algo como o seguinte:
+$ git rm \*~
+Esse comando remove todos os arquivos cujos nomes terminem com um ~.
+
+Movendo Arquivos
+Assim, é um pouco confuso o fato de o Git ter um comando mv. Se você quiser renomear um arquivo no Git, você pode executar alguma coisa como:
+$ git mv arq_origem arq_destino
+
+e vai funcionar bem. Na verdade, se você executar alguma coisa assim e verificar o status, você vai ver que o Git considera que 
+arquivo foi renomeado.

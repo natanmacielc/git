@@ -1,0 +1,25 @@
+Config
+
+Sua identidade
+Um dos comandos git mais usados ​​é o git config que pode ser usado para definir valores de configuração específicos 
+do usuário como e-mail, algoritmo preferido para diff, nome de usuário e formato de arquivo etc. 
+Por exemplo, o seguinte comando pode ser usado para definir o email:
+$ git config --global user.email email@email.com
+
+e este para definir o username:
+$ git config --global user.name name
+
+Seu Editor
+Agora que a sua identidade está configurada, você pode escolher o editor de texto padrão que será chamado quando Git 
+precisar que você entre uma mensagem. Se não for configurado, o Git usará o editor padrão, que normalmente é o Vim. 
+Se você quiser usar um editor de texto diferente, como o Emacs, você pode fazer o seguinte:
+$ git config --global core.editor emacs
+
+Testando suas configurações:
+Se você quiser testar as suas configurações, você pode usar o comando git config --list para listar todas as configurações
+que o Git conseguir encontrar naquele momento:
+
+Você pode também testar o que Git tem em uma chave específica digitando git config <key>:
+
+$ git config user.name
+name

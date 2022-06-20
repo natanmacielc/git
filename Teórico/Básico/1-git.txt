@@ -1,0 +1,57 @@
+GIT
+
+É um sistema para o eficiente gerenciamento de código e controle de versão de seus projetos, usado principalmente
+no desenvolvimento de software.
+Um projeto controlado pelo Git é chamado de repositório de versionamento. Tipicamente uma cópia "oficial"
+do repositório fica salvo em um servidor (repositório remoto). Cada pessoa que trabalha no projeto pode fazer uma cópia do
+repositório para seu computador (repositório local). A pessoa então faz suas alterações no projeto (novos commits) e depois
+salva as alterações no servidor.
+
+Sobre o Controle de versão
+Controle de versão é um sistema que registra alterações em um arquivo ou conjunto de arquivos ao longo do tempo para que 
+você possa lembrar versões específicas mais tarde. Se você é um designer gráfico ou web designer e quer manter todas as versões 
+de uma imagem ou layout (o que você certamente deveria querer), um sistema de controle de versão (VCS) é a coisa correta a ser 
+usada. Ele permite que você reverta para estado anterior determinados arquivos ou um projeto inteiro, compare as mudanças ao 
+longo do tempo, veja quem modificou pela última vez algo que pode estar causando um problema, quem introduziu um problema, 
+quando, e muito mais. Usar um VCS também significa que se você estragar tudo ou perder arquivos, você pode facilmente recuperar.
+Além disso, você tem tudo isso com muito pouco trabalho.
+
+Imagens, Não Diferenças
+A principal diferença entre o Git e qualquer outro VCS (Subversion e similares) é a maneira como o Git trata seus dados. 
+Conceitualmente, a maioria dos outros sistemas armazenam informação como uma lista de mudanças nos arquivos. Estes sistemas 
+(CVS, Subversion, Perforce, Bazaar, e assim por diante) tratam a informação como um conjunto de arquivos e as mudanças feitas 
+em cada arquivo ao longo do tempo.
+O Git não trata nem armazena seus dados desta forma. Em vez disso, o Git trata seus dados mais como um conjunto de imagens de
+um sistema de arquivos em miniatura. Toda vez que você fizer um commit, ou salvar o estado de seu projeto no Git, ele 
+basicamente tira uma foto de todos os seus arquivos e armazena uma referência para esse conjunto de arquivos. 
+Para ser eficiente, se os arquivos não foram alterados, o Git não armazena o arquivo novamente, apenas um link para o arquivo 
+idêntico anterior já armazenado. O Git trata seus dados mais como um fluxo do estado dos arquivos.
+
+O Git Geralmente Somente Adiciona Dados
+Quando você faz algo no Git, quase sempre dados são adicionados no banco de dados do Git - e não removidos. É difícil fazer
+algo no sistema que não seja reversível ou fazê-lo apagar dados de forma alguma. Como em qualquer VCS, você pode perder 
+alterações que ainda não tenham sido adicionadas em um commit; mas depois de fazer o commit no Git do estado atual das 
+alterações, é muito difícil que haja alguma perda, especialmente se você enviar regularmente o seu banco de dados para outro 
+repositório.
+Isso faz com que o uso do Git seja somente alegria, porque sabemos que podemos experimentar sem o perigo de estragar algo. 
+
+Os Três Estados
+Agora, preste atenção. Esta é a principal coisa a lembrar sobre Git se você quiser que o resto do seu processo de aprendizagem
+ocorra sem problemas. O Git tem três estados principais que seus arquivos podem estar: committed, modificado (modified) e 
+preparado (staged). Committed significa que os dados estão armazenados de forma segura em seu banco de dados local. 
+Modificado significa que você alterou o arquivo, mas ainda não fez o commit no seu banco de dados. Preparado significa que você 
+marcou a versão atual de um arquivo modificado para fazer parte de seu próximo commit.
+Isso nos leva a três seções principais de um projeto Git: o diretório Git, o diretório de trabalho e área de preparo.
+O diretório Git é onde o Git armazena os metadados e o banco de dados de objetos de seu projeto. Esta é a parte mais importante
+do Git, e é o que é copiado quando você clona um repositório de outro computador.
+O diretório de trabalho é uma simples cópia de uma versão do projeto. Esses arquivos são pegos do banco de dados compactado no 
+diretório Git e colocados no disco para você usar ou modificar.
+A área de preparo é um arquivo, geralmente contido em seu diretório Git, que armazena informações sobre o que vai entrar em seu
+próximo commit. É por vezes referido como o “índice”, mas também é comum referir-se a ele como área de preparo (staging area).
+
+Fluxo de Trabalho
+1. Você modifica arquivos no seu diretório de trabalho.
+
+2. Você prepara os arquivos, adicionando imagens deles à sua área de preparo.
+
+3. Você faz commit, o que leva os arquivos como eles estão na área de preparo e armazena essa imagens de forma permanente para o diretório do Git.

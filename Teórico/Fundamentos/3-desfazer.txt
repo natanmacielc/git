@@ -1,0 +1,23 @@
+Desfazer
+
+Desfazendo Coisas
+Em qualquer estágio, você talvez queira desfazer algo. Aqui, vamos rever algumas ferramentas básicas para desfazer modificações 
+que porventura tenha feito. Seja cuidadoso, porque nem sempre você pode voltar uma alteração desfeita. Essa é uma das poucas 
+áreas do Git onde pode perder algum trabalho feito se você cometer algum engano.
+Um dos motivos mais comuns para desfazer um comando, aparece quando você executa um commit muito cedo e possivelmente esquecendo
+de adicionar alguns arquivos ou você escreveu a mensagem do commit de forma equivocada. Se você quiser refazer este commit, 
+execute o commit novamente usando a opção --amend:
+$ git commit --amend
+
+Por exemplo, se você fizer um commit e então lembrar que esqueceu de colocar no stage as modificações de um arquivo que você 
+quer adicionar no commit, você pode fazer algo semelhante a isto:
+$ git commit -m 'initial commit'
+$ git add forgotten_file
+$ git commit --amend
+
+No final das contas você termina com um único commit – O segundo commit substitui o resultante do primeiro.
+git reset HEAD <file>... para retirar o arquivo do stage. Então, vamos usar esta sugestão para retirar o arquivo.
+
+Para descartar as alterações feitas num arquivo, no seu diretório de trabalho, basta executar o seguinte comando:
+$ git checkout -- <file>
+

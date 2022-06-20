@@ -1,0 +1,37 @@
+Remoto
+
+Trabalhando de Forma Remota
+Para colaborar com qualquer projeto Git, você precisará saber como gerenciar seus repositórios remotos. Repositórios remotos são 
+versões de seu repositório hospedado na Internet ou em uma rede qualquer. Você pode ter vários deles, cada um dos quais geralmente
+é ou somente leitura ou leitura/escrita. Colaborar com outras pessoas envolve o gerenciamento destes repositórios remotos, fazer 
+pushing(atualizar) e pulling(obter) de dados para e deles quando você precisar compartilhar seu trabalho. Gerenciar repositórios 
+remotos inclui saber como adicioná-los remotamente, remover aqueles que não são mais válidos, gerenciar vários branches(ramos) e 
+definí-los como rastreados ou não e muito mais. Nesta seção, abordaremos algumas destas habilidades de gereciamento remoto.
+
+Exibindo seus repositórios remotos
+Para ver quais servidores remotos você configurou, você pode executar o comando git remote. Ele lista os nomes abreviados de cada 
+repositório remoto manejado que você especificou. Se você clonou seu repositório, você deve pelo menos ver origin(origem) – que é 
+o nome padrão dado pelo Git ao servidor que você clonou.
+$ git remote
+origin
+Você também pode especificar -v, que mostra as URLs que o Git tem armazenado pelo nome abreviado a ser usado para ler ou gravar 
+naquele repositório remoto:
+
+Adicionando Repositórios Remotos
+Nós mencionamos e demos algumas demonstrações de como o comando clone implicitamente adiciona a origem(origin) remota para você. 
+Aqui está como adicionar um novo repositório remoto explicitamente. Para adicionar um novo repositório Git remoto como um nome 
+curto que você pode referenciar facilmente, execute git remote add <shortname> <url>.
+
+Pushing to Your Remotes
+Quando você tem seu projeto em um ponto que deseja compartilhar, é necessário enviá-lo para o servidor remoto. O comando para 
+isso é simples: git push [remote-name] [branch-name]
+
+Inspecionando o Servidor Remoto
+Se você quiser ver mais informações sobre um servidor remoto em particular, você pode usar o comando git remote show [nome-remoto]. 
+
+Removendo e Renomeando Remotes
+Você pode utilizar o git remote rename para alterar o nome curto de servidores remotos. Por exemplo, se você deseja renomear pb 
+para` paul`, você pode fazer isso com git remote rename
+
+Se você quiser remover um servidor remoto por algum motivo - e você anteriormente moveu o servidor ou não está mais usando um em 
+particular, ou talvez um contribuidor não esteja mais contribuindo - você pode usar git remote remove ou git remote rm.
