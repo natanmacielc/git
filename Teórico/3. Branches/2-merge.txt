@@ -1,0 +1,85 @@
+Merge
+
+O básico de Ramificação (Branch) e Mesclagem (Merge)
+
+Vamos ver um exemplo simples de ramificação (branching) e mesclagem (merging) com um fluxo de trabalho que você pode vir a usar 
+no mundo real. Você seguirá os seguintes passos:
+
+1. Trabalhar um pouco em um website.
+2. Criar um branch para um nova história de usuário na qual você está trabalhando.
+3. Trabalhar um pouco neste novo branch.
+
+Nesse ponto, você vai receber uma mensagem dizendo que outro problema é crítico e você precisa fazer a correção. Você fará o 
+seguinte:
+
+1. Mudar para o seu branch de produção.
+2. Criar um novo branch para fazer a correção.
+3. Após testar, fazer o merge do branch de correção, e fazer push para produção.
+
+Voltar para sua história de usuário original e continuar trabalhando.
+
+Ramificação Básica
+
+Primeiramente, digamos que você esteja trabalhando em seu projeto e já tenha alguns commits no branch master.
+Você decidiu que você vai trabalhar no chamado #53 em qualquer que seja o sistema de gerenciamento de chamados que a sua empresa usa.
+Para criar um novo branch e mudar para ele ao mesmo tempo, você pode executar o comando git checkout com o parâmetro -b:
+$ git checkout -b iss53
+Switched to a new branch "iss53"
+
+Esta é a abreviação de:
+$ git branch iss53
+$ git checkout iss53
+
+Você trabalha no seu website e adiciona alguns commits.
+Ao fazer isso, você move o branch iss53 para a frente, pois este é o branch que está selecionado, ou checked out(isto é, seu 
+HEAD está apontando para ele):
+$ vim index.html
+$ git commit -a -m 'Create new footer [issue 53]'
+
+Seu próximo passo é fazer a correção necessária; Vamos criar um branch chamado hotfix no qual trabalharemos até a correção estar
+pronta:
+$ git checkout -b hotfix
+Switched to a new branch 'hotfix'
+$ vim index.html
+$ git commit -a -m 'Fix broken email address'
+[hotfix 1fb7853] Fix broken email address
+ 1 file changed, 2 insertions(+)
+
+Você pode executar seus testes, se assegurar que a correção está do jeito que você quer, e finalmente mesclar o branch hotfix 
+de volta para o branch master para poder enviar para produção. Para isso, você usa o comando git merge command:
+$ git checkout master
+$ git merge hotfix
+Updating f42c576..3a0874c
+Fast-forward
+ index.html | 2 ++
+ 1 file changed, 2 insertions(+)
+
+Assim que a sua correção importantíssima é entregue, você já pode voltar para o trabalho que estava fazendo antes da interrupção.
+Porém, você irá antes excluir o branch hotfix, pois ele já não é mais necessário — o branch master aponta para o mesmo lugar. 
+Você pode remover o branch usando a opção -d com o comando git branch:
+$ git branch -d hotfix
+Deleted branch hotfix (3a0874c).
+
+Agora você pode retornar ao branch com seu trabalho em progresso na issue #53 e continuar trabalhando.
+$ git checkout iss53
+Switched to branch "iss53"
+
+É importante frisar que o trabalho que você fez no seu branch hotfix não está contido nos arquivos do seu branch iss53. Caso você 
+precise dessas alterações, você pode fazer o merge do branch master no branch iss53 executando git merge master
+
+Conflitos Básicos de Merge
+De vez em quando, esse processo não acontece de maneira tão tranquila. Se você mudou a mesma parte do mesmo arquivo de maneiras 
+diferentes nos dois branches que você está tentando mesclar, o Git não vai conseguir integrá-los de maneira limpa. Se a sua 
+correção para o problema #53 modificou a mesma parte de um arquivo que também foi modificado em hotfix, você vai ter um conflito 
+de merge que se parece com isso:
+$ git merge iss53
+Auto-merging index.html
+CONFLICT (content): Merge conflict in index.html
+Automatic merge failed; fix conflicts and then commit the result.
+
+O Git não criou automaticamente um novo commit de merge. Ele pausou o processo enquanto você soluciona o conflito. Para ver 
+quais arquivos não foram mesclados a qualquer momento durante um conflito de merge, você pode executar git status
+
+Qualquer arquivo que tenha conflitos que não foram solucionados é listado como unmerged("não mesclado"). O Git adiciona símbolos 
+padrão de resolução de conflitos nos arquivos que têm conflitos, para que você possa abrí-los manualmente e solucionar os 
+conflitos.
